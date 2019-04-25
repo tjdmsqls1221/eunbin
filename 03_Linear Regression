@@ -1,3 +1,4 @@
+import tensorflow as tf
 import numpy as np #numpy를 np로 import
 
 X = np.array([1, 2, 3]) #입력값 x 지정
