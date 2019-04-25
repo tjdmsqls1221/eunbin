@@ -1,0 +1,45 @@
+import tensorflow as tf #Tensorflow 라이브러리를 임포트하고 그것을 tf로 정한다.
+
+import numpy as np #numpy를 np로 지정
+tf.enable_eager_execution() #eager_execution함수로 즉시실행
+
+# Data
+x_data = [1, 2, 3, 4, 5] #x데이터 값 제시(x는 input)
+y_data = [1, 2, 3, 4, 5] #y데이터 값 제시(y는 출력)
+
+# W, b initialize
+W = tf.Variable(2.9) #w를 2.9로 초기값 제시
+b = tf.Variable(0.5) #b를 0.5로 초기값 제시
+
+learning_rate=0.01 #learning_rate를 0.01상수로 제시
+
+# W, b update
+for i in range(100+1): #i는 0부터 101번 순회
+    # Gradient descent #cost를 최소화하게 하는 w와 b를 탐색하는 함수 Gradient descent사용
+    with tf.GradientTape() as tape: #tape로 GradientTape를 구현(with이하 정보들을 tape에 기록)
+        hypothesis = W * x_data + b #H(x) = Wx + b라는 가정
+        cost = tf.reduce_mean(tf.square(hypothesis - y_data)) #W와 b에 대한 적합성을 판단한다.
+    W_grad, b_grad = tape.gradient(cost, [W, b]) #tape에 gradient메소드 호출 후 개별 경사도(=미분값)를 구한다
+    W.assign_sub(learning_rate * W_grad) #assign_sub를 호출하여 w업데이트
+    b.assign_sub(learning_rate * b_grad) #assign_sub를 호출하여 b업데이트
+    if i % 10 == 0: #w와 b값의 변화를 10의 배수마다 지정한 형태로 출력
+      print("{:5}|{:10.4f}|{:10.4f}|{:10.6f}".format(i, W.numpy(), b.numpy(), cost))
+
+print()
+
+#   0|    2.4520|    0.3760| 45.660004
+   10|    1.1036|    0.0034|  0.206336
+   20|    1.0128|   -0.0209|  0.001026
+   30|    1.0065|   -0.0218|  0.000093
+   40|    1.0059|   -0.0212|  0.000083
+   50|    1.0057|   -0.0205|  0.000077
+   60|    1.0055|   -0.0198|  0.000072
+   70|    1.0053|   -0.0192|  0.000067
+   80|    1.0051|   -0.0185|  0.000063
+   90|    1.0050|   -0.0179|  0.000059 #i는10의 배수들만 출력되고 그에 해당하는 w,b,cost 값 출력된다. w값(2.9->1.0수렴), b값과 cost값(0.5->0수렴)
+   
+# predict
+print(W * 5 + b) #새로운 데이터 x에 새로운 데이터 5 입력
+print(W * 2.5 + b) #새로운 데이터 x에 새로운 데이터 2.5 입력   
+# tf.Tensor(5.0066934, shape=(), dtype=float32) #결과가 5에 거의 가깝게 나온다
+  tf.Tensor(2.4946523, shape=(), dtype=float32) # 결과가 거의 2.5에 가깝게 나온다
