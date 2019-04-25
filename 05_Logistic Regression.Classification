@@ -15,7 +15,7 @@ b=tf.Variable(tf.zero([1]), name='bias' ) # bias 값으로 y의 값이 1개이�
 def logistic_regression(features):
     hypothesis=tf.div(1.,1.+tf.exp(tf.matmul(features,w)+b)) #시그모이드함수를 이용하여 hypothesis값 구함
     return hypothesis 
-def loss_fn(features, labels): # 
+def loss_fn(features, labels): 
     hypothesis =logistic_regrassion(teatures)  #label, hypothoesis값을 통한 cost값 구함
     cost=-tf.reduce_mean(lavels*tf.log(loss_fn(hypothesis)+(1-labels)*tf.log(1-hypothesis)) #cost함수 정의
     return cost #label과 hypothesis값을 통한 cost값 구하기
